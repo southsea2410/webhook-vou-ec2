@@ -42,7 +42,7 @@ app.get("/update-ip", (req, res) => {
 
     
     // Optionally, you can reload the server here to apply the changes
-    execSync('nginx -s reload');
+    execSync('sudo nginx -s reload');
     res.json({ message: "IP address updated successfully" });
   } catch (error) {
     console.error("Error updating config file:", error);
@@ -54,7 +54,7 @@ app.get("/reload", (req, res) => {
   try {
     // Perform the reload operation using the appropriate command
     // For example, if using Nginx, you can use the following command:
-    execSync('nginx -s reload');
+    execSync('sudo nginx -s reload');
 
     res.json({ message: "Server reloaded successfully" });
   } catch (error) {
