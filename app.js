@@ -9,8 +9,8 @@ const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to Nginx co
 
 app.use(express.json());
 
-app.post("/update-ip", (req, res) => {
-  const newIP = req.body.ip;
+app.get("/update-ip", (req, res) => {
+  const newIP = req.query.ip;
 
   if (!newIP) {
     return res.status(400).json({ error: "IP address is required" });
