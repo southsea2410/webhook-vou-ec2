@@ -8,6 +8,7 @@ const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to Nginx co
 // const configFilePath = "./vou.conf"; // Example path to Nginx config file
 
 let oldIP = "";
+let lastUpdatedTime = new Date();
 
 app.use(express.json());
 
@@ -19,9 +20,10 @@ app.get("/update-ip", (req, res) => {
   }
 
   if (newIP === oldIP) {
-    return res.json({ message: "IP address is already up to date" });
+    return res.json({ message: "IP address is already up to date, last updated time: " + lastUpdatedTime.toISOString() });
   }
   oldIP = newIP;
+  lastUpdatedTime = new Date();
 
   try {
     // Read the existing config file content
