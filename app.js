@@ -7,6 +7,8 @@ const port = 3000; // Replace with your desired port
 const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to Nginx config file
 // const configFilePath = "./vou.conf"; // Example path to Nginx config file
 
+let oldIP = "";
+
 app.use(express.json());
 
 app.get("/update-ip", (req, res) => {
@@ -15,6 +17,11 @@ app.get("/update-ip", (req, res) => {
   if (!newIP) {
     return res.status(400).json({ error: "IP address is required" });
   }
+
+  if (newIP === oldIP) {
+    return res.json({ message: "IP address is already up to date" });
+  }
+  oldIP = newIP;
 
   try {
     // Read the existing config file content
