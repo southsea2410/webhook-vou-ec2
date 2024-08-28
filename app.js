@@ -54,7 +54,7 @@ app.get("/reload", (req, res) => {
   try {
     // Perform the reload operation using the appropriate command
     // For example, if using Nginx, you can use the following command:
-    // execSync('nginx -s reload');
+    execSync('nginx -s reload');
 
     res.json({ message: "Server reloaded successfully" });
   } catch (error) {
