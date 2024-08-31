@@ -30,17 +30,13 @@ app.get("/update-ip", (req, res) => {
     const configData = fs.readFileSync(configFilePath, "utf8");
 
     // Replace the old IP with the new one using regular expressions or string manipulation
-    const updated1ConfigData = configData.replace(
-      /proxy_pass http:\/\/.+:/g,
-      `proxy_pass http://[${newIP}]:`
-    );
-    const updated2ConfigData = updated1ConfigData.replace(
-      /proxy_pass https:\/\/.+;/g,
-      `proxy_pass https://[${newIP}];`
+    const updatedConfigData = configData.replace(
+      /\/\/\[[.+]+\]/g,
+      `[${newIP}]`
     );
 
     // Write the updated content back to the config file
-    fs.writeFileSync(configFilePath, updated2ConfigData, "utf8");
+    fs.writeFileSync(configFilePath, updatedConfigData, "utf8");
 
     
     // Optionally, you can reload the server here to apply the changes
