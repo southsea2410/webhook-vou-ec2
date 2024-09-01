@@ -4,8 +4,8 @@ const fs = require("fs");
 
 const app = express();
 const port = 3000; // Replace with your desired port
-// const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to Nginx config file
-const configFilePath = "./vou.conf"; // Example path to Nginx config file
+const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to Nginx config file
+// const configFilePath = "./vou.conf"; // Example path to Nginx config file
 
 let oldIP = "";
 let lastUpdatedTime = new Date();
