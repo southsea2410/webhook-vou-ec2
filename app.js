@@ -40,7 +40,7 @@ app.get("/update-ip", (req, res) => {
     fs.writeFileSync(configFilePath, updatedConfigData, "utf8");
 
     // Optionally, you can reload the server here to apply the changes
-    // execSync("sudo nginx -s reload");
+    execSync("sudo nginx -s reload");
     res.json({ message: "IP address updated successfully" });
   } catch (error) {
     console.error("Error updating config file:", error);
