@@ -4,11 +4,19 @@ const fs = require("fs");
 
 const app = express();
 const port = 3000; // Replace with your desired port
-const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to Nginx config file
+
+const configFilePath = "/etc/nginx/conf.d/vou.conf"; // Example path to VOU Nginx config file
+const nginxConfigFilePath = "/etc/nginx/nginx.conf"; // Example path to Nginx config file
+
 // const configFilePath = "./vou.conf"; // Example path to Nginx config file
+// const nginxConfigFilePath = "./nginx.conf"; // Example path to Nginx config file
 
 let oldIP = "";
 let lastUpdatedTime = new Date();
+
+function replaceIP(ip, data){
+  return data.replace(/\/\/\[.+\]:/g, `//[${ip}]:`);
+}
 
 app.use(express.json());
 
@@ -31,15 +39,12 @@ app.get("/update-ip", (req, res) => {
 
   try {
     // Read the existing config file content
-    const configData = fs.readFileSync(configFilePath, "utf8");
+    const vou_config = fs.readFileSync(configFilePath, "utf8");
+    fs.writeFileSync(configFilePath, replaceIP(newIP, vou_config), "utf8");
 
-    // Replace the old IP with the new one using regular expressions or string manipulation
-    const updatedConfigData = configData.replace(/\/\/\[.+\]/g, `//[${newIP}]`);
+    const nginx_config = fs.readFileSync(nginxConfigFilePath, "utf8");
+    fs.writeFileSync(nginxConfigFilePath, replaceIP(newIP, nginx_config), "utf8"); 
 
-    // Write the updated content back to the config file
-    fs.writeFileSync(configFilePath, updatedConfigData, "utf8");
-
-    // Optionally, you can reload the server here to apply the changes
     execSync("sudo nginx -s reload");
     res.json({ message: "IP address updated successfully" });
   } catch (error) {
