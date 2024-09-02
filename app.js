@@ -18,6 +18,10 @@ function replaceIP(ip, data){
   return data.replace(/\/\/\[.+\]:/g, `//[${ip}]:`);
 }
 
+function replaceNginxConfig(ip, data){
+  return data.replace(/\[.+\]:3300;/g, `[${ip}]:3300;`);
+}
+
 app.use(express.json());
 
 app.get("/update-ip", (req, res) => {
@@ -43,7 +47,7 @@ app.get("/update-ip", (req, res) => {
     fs.writeFileSync(configFilePath, replaceIP(newIP, vou_config), "utf8");
 
     const nginx_config = fs.readFileSync(nginxConfigFilePath, "utf8");
-    fs.writeFileSync(nginxConfigFilePath, replaceIP(newIP, nginx_config), "utf8"); 
+    fs.writeFileSync(nginxConfigFilePath, replaceNginxConfig(newIP, nginx_config), "utf8"); 
 
     execSync("sudo nginx -s reload");
     res.json({ message: "IP address updated successfully" });
