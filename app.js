@@ -61,6 +61,14 @@ app.get("/reload", (req, res) => {
   }
 });
 
+app.get('/vou-config', function(req, res){
+  res.download(configFilePath); // Set disposition and send it.
+});
+
+app.get('/nginx-config', function(req, res){
+  res.download('/etc/nginx/nginx.conf');
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
