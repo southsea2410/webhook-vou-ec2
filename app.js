@@ -14,12 +14,12 @@ const nginxConfigFilePath = "/etc/nginx/nginx.conf"; // Example path to Nginx co
 let oldIP = "";
 let lastUpdatedTime = new Date();
 
-function replaceIP(ip, data){
-  return data.replace(/\/\/\[.+\]:/g, `//[${ip}]:`);
+function replaceIP(ip, data) {
+  return data.replace(/\[[0-9:a-z]+\]:/g, `[${ip}]:`);
 }
 
-function replaceNginxConfig(ip, data){
-  return data.replace(/\[.+\]:3300;/g, `[${ip}]:3300;`);
+function replaceNginxConfig(ip, data) {
+  return data.replace(/\[[0-9:a-z]+\]:3300;/g, `[${ip}]:3300;`);
 }
 
 app.use(express.json());
@@ -47,7 +47,11 @@ app.get("/update-ip", (req, res) => {
     fs.writeFileSync(configFilePath, replaceIP(newIP, vou_config), "utf8");
 
     const nginx_config = fs.readFileSync(nginxConfigFilePath, "utf8");
-    fs.writeFileSync(nginxConfigFilePath, replaceNginxConfig(newIP, nginx_config), "utf8"); 
+    fs.writeFileSync(
+      nginxConfigFilePath,
+      replaceNginxConfig(newIP, nginx_config),
+      "utf8"
+    );
 
     execSync("sudo nginx -s reload");
     res.json({ message: "IP address updated successfully" });
@@ -70,12 +74,12 @@ app.get("/reload", (req, res) => {
   }
 });
 
-app.get('/vou-config', function(req, res){
+app.get("/vou-config", function (req, res) {
   res.download(configFilePath); // Set disposition and send it.
 });
 
-app.get('/nginx-config', function(req, res){
-  res.download('/etc/nginx/nginx.conf');
+app.get("/nginx-config", function (req, res) {
+  res.download("/etc/nginx/nginx.conf");
 });
 
 app.listen(port, () => {
